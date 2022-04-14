@@ -4,7 +4,7 @@
  2) Koneti Anuhya
  3) Kothuru Sharvani
  4) Maddaka Yashwanth<br> 
- 5)Nelavalli Sri Nikhitha
+ 5) Nelavalli Sri Nikhitha
  
   ### Description 
 The Doctor management system allows patients to enquire about availability of doctors based on their schedule ,book and cancel appointments. The goal of this case study is to design and develop a database that stores information about various doctors.. Patients may look for doctors by entering the details. If there are any doctors available, they will be displayed. Following that, patients maygo to cancellation page and then cancel the appointment. 
