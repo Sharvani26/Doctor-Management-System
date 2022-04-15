@@ -183,8 +183,17 @@ def search():
 @app.route("/appointments")
 def appointments():
     mailid = session.get("email",None)
+    t = date.today()
     cursor.execute("SELECT * FROM Appointments WHERE id = '{}'".format(mailid))
     appointments = cursor.fetchall()
+    for i in appointments:
+        k = i[4]
+        if k > t:
+            Status = "Not Completed"
+        elif k <= t:
+            Status = "Completed"
+        cursor.execute("UPDATE Appointments SET Status = '{}' WHERE id='{}' and Hid='{}' and Did='{}' and Date='{}'".format(Status,mailid,i[1],i[2],i[4]))
+        connection.commit()
     print(appointments)
     k = len(appointments)
     return render_template("appointments.html", c = appointments, k = k,a=mailid)
@@ -211,7 +220,7 @@ def rappointments():
 @app.route("/rpastappointments")
 def rpastappointments():
     mailid = session.get("Email",None)
-    cursor.execute("SELECT * FROM Appointments WHERE id = '{}'".format(mailid))
+    cursor.execute("SELECT * FROM Appointments JOIN insurance where Appointments.Hid='{}' and Appointments.id=insurance.Pid".format(mailid))
     appointments = cursor.fetchall()
     print(appointments)
     k = len(appointments)
@@ -285,7 +294,9 @@ def book(did,d):
     cursor.execute("SELECT * FROM slots WHERE Did='{}' and Hid='{}' and Date='{}'".format(did,Hid,d))
     r = cursor.fetchall()
     print(r)
-    if k >= t:
+    print(k)
+    print(t)
+    if k > t:
         Status = "Not Completed"
     elif k < t:
         Status = "Completed"
@@ -452,6 +463,17 @@ def upload_file():
 def send_uploaded_file(filename):
     from flask import send_from_directory
     return send_from_directory(app.config['FILE_UPLOADS'], filename)
+
+@app.route("/rpa/<id>/<did>/<date>")
+def rpa(id,did,date):
+    mailid = session.get("Email",str)
+    cursor.execute("UPDATE Appointments SET Status = '{}' WHERE id='{}' and Hid='{}' and Did='{}' and Date='{}'".format("Not Showed",id,mailid,did,date))
+    connection.commit()
+    cursor.execute("SELECT * FROM Appointments JOIN insurance where Appointments.Hid='{}' and Appointments.id = '{}'and Appointments.Did = '{}' and Appointments.id=insurance.Pid".format(mailid,id,did))
+    appointments = cursor.fetchall()
+    print(appointments)
+    k = len(appointments)
+    return render_template("rpa.html", c = appointments, k = k,a=mailid)
 
 if __name__ == "__main__":
     app.run(debug=True)
