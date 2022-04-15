@@ -111,14 +111,15 @@
                     {% for i in c%}
                     {% if i[5] != "Not Completed" %}
                     <tr>
-                      <th scope="row" colspan="1" class="text-muted">1</th>
                       <td colspan="2">{{i[0]}}</td>
                       <td colspan="2">{{i[2]}}</td>
                       <td colspan="2">{{i[4]}}</td>
                       <td colspan="2">{{i[3]}}</td>
                       <td colspan="2">{{i[7]}}</td>
-                      <td colspan="2" style="color: green;">Completed</td>
-                      <td colspan="2" type="checkbox">Not Showed</td>
+                      <td colspan="2" style="color: green;">{{i[5]}}</td>
+                      {% if i[5] != "Not Showed" %}
+                      <td colspan="2"><a href="/rpa/{{i[0]}}/{{i[2]}}/{{i[4]}}">Not Showed</a></td>
+                      {%endif%}
                     <tr>
                     {%endif%}
                     {%endfor%}
